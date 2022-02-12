@@ -4,7 +4,7 @@ setup(
     name='wordle',
     version='1.0',
     author='chriskr',
-    description='Solve wordles.',
+    description='Utility to solve wordles',
     packages=find_packages(),
     install_requires=[
         'setuptools',
