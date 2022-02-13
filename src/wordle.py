@@ -63,6 +63,10 @@ def sortByWeight(list, histo):
                                           for word in list], key=lambda t: t[1], reverse=True)]
 
 
+def positions(word, pos):
+    return all([c == word[i] for(c, i) in pos])
+
+
 def main_func():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--contains",
@@ -85,8 +89,12 @@ def main_func():
                         help='Sort results by frequency of letters')
     parser.add_argument('-m', '--max', type=int,
                         help='Return only MAX results')
+    parser.add_argument(
+        '-p', '--pos', help='Search 5 letter words with letters on given position (e.g. ??ro)', default='')
 
     args = parser.parse_args()
+    pos = [t for t in zip(args.pos, range(5)) if t[0]
+           in string.ascii_lowercase]
 
     matchers = [matcher for matcher in [
         (startswith, args.startswith),
@@ -95,12 +103,13 @@ def main_func():
         (notcontains, args.notcontains),
         (pos2, args.pos2),
         (pos3, args.pos3),
-        (pos4, args.pos4)
+        (pos4, args.pos4),
+        (positions, pos)
     ] if matcher[1]]
 
     with open(os.path.join(SOURCE_ROOT, FIVE_LETTERS_WORDS)) as f:
         matches = [word for word in f.readlines() if all(
-            [matcher(word.strip('\n'), chars) for (matcher, chars) in matchers])]
+            [matcher(word.strip('\n'), _args) for (matcher, _args) in matchers])]
 
         if (args.onlyUnique):
             matches = toUniqueCharWords(matches)
