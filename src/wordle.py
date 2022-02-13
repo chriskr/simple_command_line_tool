@@ -1,6 +1,8 @@
 import argparse
 import os
 import string
+import re
+
 
 DICT = 'dict.txt'
 FIVE_LETTERS_WORDS = 'five-letter-words.txt'
@@ -67,6 +69,10 @@ def positions(word, pos):
     return all([c == word[i] for(c, i) in pos])
 
 
+def notpositions(word, pos):
+    return all([not word[i] in c for(c, i) in pos])
+
+
 def main_func():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--contains",
@@ -92,9 +98,15 @@ def main_func():
     parser.add_argument(
         '-p', '--pos', help='Search 5 letter words with letters on given position (e.g. ??ro)', default='')
 
+    parser.add_argument(
+        '-t', '--notpos', help='Search 5 letter words not with letters on given position (e.g. :ro:a, group separator :;,.)', default='')
+
     args = parser.parse_args()
     pos = [t for t in zip(args.pos, range(5)) if t[0]
            in string.ascii_lowercase]
+
+    notpos = [t for t in zip(
+        re.split('[,.;:]', args.notpos), range(5)) if t[0]]
 
     matchers = [matcher for matcher in [
         (startswith, args.startswith),
@@ -104,7 +116,8 @@ def main_func():
         (pos2, args.pos2),
         (pos3, args.pos3),
         (pos4, args.pos4),
-        (positions, pos)
+        (positions, pos),
+        (notpositions, notpos),
     ] if matcher[1]]
 
     with open(os.path.join(SOURCE_ROOT, FIVE_LETTERS_WORDS)) as f:
