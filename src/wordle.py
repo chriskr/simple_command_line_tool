@@ -79,6 +79,7 @@ def main_func():
                         help="Search 5 letter words containing given letters")
     parser.add_argument("-n", "--notcontains",
                         help="Search 5 letter words not containing given letters")
+    """
     parser.add_argument(
         "-s", "--startswith", help="Search 5 letter words starting with given letters")
     parser.add_argument("-e", "--endswith",
@@ -89,6 +90,7 @@ def main_func():
                         help="Search 5 letter words with given letter at third position")
     parser.add_argument("-4", "--pos4",
                         help="Search 5 letter words with given letter at forth position")
+    """
     parser.add_argument('-u', '--onlyUnique', action='store_true',
                         help='Only include words with unique letters')
     parser.add_argument('-w', '--sortByWeight', action='store_true',
@@ -109,13 +111,13 @@ def main_func():
         re.split('[,.;:]', args.notpos), range(5)) if t[0]]
 
     matchers = [matcher for matcher in [
-        (startswith, args.startswith),
-        (endswith, args.endswith),
+        #(startswith, args.startswith),
+        #(endswith, args.endswith),
         (contains, args.contains),
         (notcontains, args.notcontains),
-        (pos2, args.pos2),
-        (pos3, args.pos3),
-        (pos4, args.pos4),
+        #(pos2, args.pos2),
+        #(pos3, args.pos3),
+        #(pos4, args.pos4),
         (positions, pos),
         (notpositions, notpos),
     ] if matcher[1]]
